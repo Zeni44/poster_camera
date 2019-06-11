@@ -1,0 +1,5 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/entities/poster_camera"
+	"$translucent" 1
+}

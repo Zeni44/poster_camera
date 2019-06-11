@@ -6,6 +6,8 @@ SWEP.Author       = "Zeni"
 SWEP.PrintName    = "Studio Camera"
 SWEP.Instructions = "Takes HQ images and exports it as .png using the poster command"
 SWEP.WorldModel   = "models/tools/camera/camera.mdl"
+SWEP.Spawnable    = true
+SWEP.Category     = "Other"
 
 local function dbg(...)
 	Msg("[Debug] ") print(...)
