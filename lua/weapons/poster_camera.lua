@@ -17,14 +17,13 @@ function SWEP:Initialize()
 	self:SetHoldType("rpg")
 
 	if CLIENT then
-		self.worldmodel = ClientsideModel(SWEP.WorldModel)
+		self.worldmodel = ClientsideModel(self.WorldModel)
 		self.worldmodel:SetNoDraw(true)
 	end
 end
 
 function SWEP:PrimaryAttack()
-	if SERVER then return end
-
+	if SERVER and not game.SinglePlayer() then return end
 	if not IsFirstTimePredicted() then return end
 
 	local size = convar:GetInt()
@@ -40,6 +39,9 @@ if CLIENT then
 
 	function SWEP:DrawWorldModel()
 		if not self:IsValid() then return end
+
+		local WorldModel = self.worldmodel
+		if not WorldModel then return end
 
 		local owner = self:GetOwner()
 		local pos
@@ -60,23 +62,20 @@ if CLIENT then
 			ang = self:GetAngles()
 		end
 
-		local WorldModel = self.worldmodel
-		if not WorldModel then return end
-
 		WorldModel:SetPos(pos)
 		WorldModel:SetAngles(ang)
 		WorldModel:DrawModel()
 	end
 
 	function SWEP:DrawWeaponSelection(x, y, w, h, a)
-		draw.SimpleText("RR", "creditslogo", x + w / 2, y, Color (255, 220, 0, a), TEXT_ALIGN_CENTER)
+		draw.SimpleText("RR", "creditslogo", x + w * 0.5, y, Color(255, 220, 0, a), TEXT_ALIGN_CENTER)
 	end
 
 	local w, h = ScrW() * 0.2, ScrH() * 0.15
 	local size
 	local isOpen
-
 	local function OpenUI()
+		if isOpen then return end
 		isOpen = true
 
 		local frame = vgui.Create("DFrame")
@@ -119,6 +118,14 @@ if CLIENT then
 			frame:Close()
 		end
 
+		--[[local btn = vgui.Create("DButton", frame)
+		btn:Dock(BOTTOM)
+		btn:DockMargin(side_margin, side_margin * 0.1, side_margin, 0)
+		btn:SetText("Reset camera")
+		btn.DoClick = function()
+			return self:_2()
+		end]]
+
 		local btn = vgui.Create("DButton", frame)
 		btn:Dock(BOTTOM)
 		btn:DockMargin(side_margin, 0, side_margin, 0)
@@ -134,11 +141,7 @@ if CLIENT then
 		end
 	end
 
-	function SWEP:Think()
-		if input.IsKeyDown(KEY_F1) and not isOpen then
-			 OpenUI()
-		end
-	end
+	concommand.Add("poster_menu", OpenUI)
 end
 
 --weapons.Register(SWEP, "poster_camera")
