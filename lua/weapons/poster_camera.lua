@@ -28,7 +28,11 @@ function SWEP:PrimaryAttack()
 
 	local size = convar:GetInt()
 	RunConsoleCommand("poster", size)
-	self:GetOwner():PrintMessage(HUD_PRINTTALK, "Saving poster under: screenshots/" .. os.date("poster-%y-%m-%d %H-%M-%S.png"))
+	local path = util.RelativePathToFull("") .. "screenshots\\" .. os.date("poster-%y-%m-%d %H-%M-%S.png")
+	self:GetOwner():PrintMessage(HUD_PRINTTALK, "Saving poster under: " .. path)
+	SetClipboardText(path)
+	self:GetOwner():PrintMessage(HUD_PRINTTALK, "Coped into clipboard!")
+
 
 	self:DoShootEffect()
 end
